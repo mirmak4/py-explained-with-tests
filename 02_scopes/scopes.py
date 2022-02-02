@@ -102,9 +102,13 @@ class Tests(unittest.TestCase):
         Define global variable, increment its value and check if it is propely incremented
         in test_example_part_2. Tests are executed in alphabetical order.
         """
+        global variable
+        variable = 0
+        variable += 1
+        # print(variable)
 
     def test_example_part_2(self):
-        pass
+        print(f"variable is now: {variable}")
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
