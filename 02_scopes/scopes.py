@@ -113,6 +113,21 @@ class Tests(unittest.TestCase):
         # print(f"variable is now: {GVARIABLE}")
         log.debug(f"GVARIABLE address is {hex(id(GVARIABLE))}")
         self.assertEqual(5, GVARIABLE, "Global var 'variable' should now be 5!")
+        self.assertNotEqual(GVARIABLE, pack.GVARIABLE)
+
+    def test_example_global_mutable_part_1(self):
+        log.debug(f"Flags address is {hex(id(pack.Flags))}")
+        log.debug(f"Flags.VARIABLE address is {hex(id(pack.Flags.VARIABLE))}")
+        log.info(f'Set "Flags.VARIABLE" to 5')
+        pack.increment_variable()
+        log.debug(f"Flags address is {hex(id(pack.Flags))}")
+        log.debug(f"Flags.VARIABLE address is {hex(id(pack.Flags.VARIABLE))}")
+        self.assertEqual(Flags.VARIABLE, pack.Flags.VARIABLE)
+
+    def test_example_global_mutable_part_2(self):
+        log.debug(f"Flags address is {hex(id(pack.Flags))}")
+        log.debug(f"Flags.VARIABLE address is {hex(id(pack.Flags.VARIABLE))}")
+        self.assertEqual(5, Flags.VARIABLE, pack.Flags.VARIABLE)
 
 
 if __name__ == "__main__":
