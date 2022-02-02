@@ -13,7 +13,7 @@ import pack
 
 # DBG is global boolean variable
 # Flags is static class with DEBUG flag
-from pack import DBG, Flags
+from pack import DBG, Flags, GVARIABLE
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -102,15 +102,18 @@ class Tests(unittest.TestCase):
         Define global variable, increment its value and check if it is propely incremented
         in test_example_part_2. Tests are executed in alphabetical order.
         """
-        global variable
-        variable = 0
-        variable += 1
-        # print(variable)
+        global GVARIABLE
+        log.debug(f"GVARIABLE address is {hex(id(GVARIABLE))}")
+        GVARIABLE += 1
+        log.debug(f"GVARIABLE address is {hex(id(GVARIABLE))}")
+        self.assertTrue("GVARIABLE" in globals(), "Global var 'GVARIABLE' should now be visible in globals()")
+        self.assertTrue("GVARIABLE" not in locals(), "Global var 'GVARIABLE' should now be visible in globals()")
 
     def test_example_part_2(self):
-        # print(f"variable is now: {variable}")
-        self.assertEqual(1, variable, "Global var 'variable' should now be 1!")
-        self.assertTrue("variable" in globals(), "Global var 'variable' should now be visible in globals()")
+        # print(f"variable is now: {GVARIABLE}")
+        log.debug(f"GVARIABLE address is {hex(id(GVARIABLE))}")
+        self.assertEqual(5, GVARIABLE, "Global var 'variable' should now be 5!")
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
