@@ -108,7 +108,9 @@ class Tests(unittest.TestCase):
         # print(variable)
 
     def test_example_part_2(self):
-        print(f"variable is now: {variable}")
+        # print(f"variable is now: {variable}")
+        self.assertEqual(1, variable, "Global var 'variable' should now be 1!")
+        self.assertTrue("variable" in globals(), "Global var 'variable' should now be visible in globals()")
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
