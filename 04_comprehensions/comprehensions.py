@@ -80,6 +80,20 @@ class Tests(unittest.TestCase):
         Both should create new list of words without words that start with underscore.
         """
         words = ("__init__", "__call__", "configure", "start", "stop")
+        def set_with_filter():
+            filtered_words = set()
+            for word in words:
+                if not word.startswith('_'):
+                    filtered_words.add(word)
+            return filtered_words
+        # print( set_with_filter() )
+        set_comprehension = {w for w in words if not w.startswith('_')}
+        log.debug(f"{set_comprehension=}")
+        self.assertEqual(set_with_filter(), set_comprehension)
+        self.assertTrue("__init__" not in set_with_filter())
+        self.assertTrue("__call__" not in set_with_filter())
+        self.assertTrue("__init__" not in set_comprehension)
+        self.assertTrue("__call__" not in set_comprehension)
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
