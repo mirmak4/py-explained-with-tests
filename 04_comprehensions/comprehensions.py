@@ -88,12 +88,17 @@ class Tests(unittest.TestCase):
             return filtered_words
         # print( set_with_filter() )
         set_comprehension = {w for w in words if not w.startswith('_')}
+        lambda_comp = filter(lambda w: not w.startswith('_'), words)
+        set_lambda_comp = set(lambda_comp)
         log.debug(f"{set_comprehension=}")
         self.assertEqual(set_with_filter(), set_comprehension)
+        self.assertEqual(set_with_filter(), set_lambda_comp)
         self.assertTrue("__init__" not in set_with_filter())
         self.assertTrue("__call__" not in set_with_filter())
         self.assertTrue("__init__" not in set_comprehension)
         self.assertTrue("__call__" not in set_comprehension)
+        self.assertTrue("__init__" not in set_lambda_comp)
+        self.assertTrue("__call__" not in set_lambda_comp)
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
