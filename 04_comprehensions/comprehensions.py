@@ -91,6 +91,7 @@ class Tests(unittest.TestCase):
         lambda_comp = filter(lambda w: not w.startswith('_'), words)
         set_lambda_comp = set(lambda_comp)
         log.debug(f"{set_comprehension=}")
+        log.debug(f"{set_lambda_comp=}")
         self.assertEqual(set_with_filter(), set_comprehension)
         self.assertEqual(set_with_filter(), set_lambda_comp)
         self.assertTrue("__init__" not in set_with_filter())
