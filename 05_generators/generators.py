@@ -165,9 +165,34 @@ class Tests(unittest.TestCase):
 
         Add tests.
         """
+        def my_generator(elements):
+            i = 0
+            for x in elements:
+                yield (i, x)
+                i += 1
+
+        my_gen = my_generator([4,100,3])
+        self.assertIsInstance(my_gen, Generator)
+        mygen = iter([4, 100, 3])
+        i = 0
+        for x in mygen:
+            self.assertEqual((i, x), next(my_gen))
+            i += 1
 
     def test_exercise_tic_tac_toe(self):
         """Write generator that infinitially returns first tic, than tac, and toe."""
+        def tic_tac_toe_gen():
+            while True:
+                yield 'tic'
+                yield 'tac'
+                yield 'toe'
+
+        mygen = tic_tac_toe_gen()
+        self.assertIsInstance(tic_tac_toe_gen(), Generator)
+        for x in range(10):
+            self.assertEqual("tic", next(mygen))
+            self.assertEqual("tac", next(mygen))
+            self.assertEqual("toe", next(mygen))
 
 
 if __name__ == "__main__":
