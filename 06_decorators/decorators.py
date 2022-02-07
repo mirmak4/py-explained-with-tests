@@ -77,7 +77,7 @@ class Tests(unittest.TestCase):
                 return _wrapper
             return _decor
 
-        @repeat(2)
+        @repeat(20)
         def get_time():
             time_now = time.time()
             log.debug(f"Float timestamp is {time_now}")
@@ -86,7 +86,13 @@ class Tests(unittest.TestCase):
         results = get_time()
 
         self.assertEqual(get_time.__name__, "get_time")
-        self.assertGreater(results.pop(), results.pop())
+        # self.assertGreater(results.pop(), results.pop())
+        results = get_time()
+        res1 = results.pop()
+        for x in range(15):
+            results.pop()
+        res2 = results.pop()
+        self.assertGreater(res1, res2)
 
         randoms = repeat(2)(random.random)()
         self.assertNotEqual(randoms.pop(), randoms.pop())
@@ -97,23 +103,50 @@ class Tests(unittest.TestCase):
         or until maximum number of retries has been reached"""
 
         def retry(num = 5):
+            print('retry')
             def _decor(fun):
+                print('decor')
                 @functools.wraps(fun)
                 def _wrapper(*args, **kwargs):
                     # write your part here
-                    return fun(*args, **kwargs)
+                    print('wrapper')
+                    try:
+                        i = 0
+                        results_gen = args[0]
+                        while i < num-1:
+                            result = next(results_gen)
+                            if result:
+                                return True
+                            i += 1
+                        return fun(*args, **kwargs)
+                    except StopIteration:
+                        return False
+                    # return fun(*args, **kwargs)
                 return _wrapper
             return _decor
 
         results = (result for result in [False, False, True, False, True])
+        results2 = (result for result in [False, False, False, False, False])
+        results3 = (result for result in [False, False, False, False, False, True])
+        results4 = (result for result in [False, False, False, False, True])
+        results5 = (result for result in [False, False, False])
 
-        def retried_function():
+        @retry()
+        def retried_function(params):
             try:
-                return next(results)
+                # print("try")
+                # log.debug("asdadf")
+                return next(params)
             except StopIteration:
                 return False
 
-        self.assertTrue(retried_function())
+        # retried_function(results)
+        # retry()(retried_function)(results)
+        self.assertTrue(retried_function(results))
+        self.assertFalse(retried_function(results2))
+        self.assertFalse(retried_function(results3))
+        self.assertTrue(retried_function(results4))
+        self.assertFalse(retried_function(results5))
  
 if __name__ == "__main__":
     unittest.main(verbosity=2)
