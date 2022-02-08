@@ -1,0 +1,23 @@
+1. Implement checkers game classes and methods.
+
+Some idea below:
+
+* Game piece class with color and position, possible moves methods
+
+* Player class that will store
+    - player elements
+    - turn flag
+
+* Board class with
+    - collection that contains game pieces
+    - board state
+    - method that picks game piece and moves it
+
+
+2. Implement chess game classes and methods.
+
+Add inheritance to game elements. Implement abstract Piece class that
+has abstract move method. Real elements should inherit form abstract class.
+
+
+
