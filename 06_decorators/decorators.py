@@ -109,18 +109,25 @@ class Tests(unittest.TestCase):
                 @functools.wraps(fun)
                 def _wrapper(*args, **kwargs):
                     # write your part here
-                    print('wrapper')
-                    try:
-                        i = 0
-                        results_gen = args[0]
-                        while i < num-1:
-                            result = next(results_gen)
-                            if result:
-                                return True
-                            i += 1
-                        return fun(*args, **kwargs)
-                    except StopIteration:
-                        return False
+                    result = None
+                    for _ in range(num):
+                        result = fun(*args, **kwargs)
+                        if bool(result):
+                            return result
+                    else:
+                        return result
+                    # print('wrapper')
+                    # try:
+                    #     i = 0
+                    #     results_gen = args[0]
+                    #     while i < num-1:
+                    #         result = next(results_gen)
+                    #         if result:
+                    #             return True
+                    #         i += 1
+                    #     return fun(*args, **kwargs)
+                    # except StopIteration:
+                    #     return False
                     # return fun(*args, **kwargs)
                 return _wrapper
             return _decor

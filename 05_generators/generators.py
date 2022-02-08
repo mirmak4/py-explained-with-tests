@@ -167,7 +167,8 @@ class Tests(unittest.TestCase):
         """
         def my_generator(elements):
             i = 0
-            for x in elements:
+            for cnt,ele in zip(range(len(elements)), elements):
+            # for x in elements:
                 yield (i, x)
                 i += 1
 
