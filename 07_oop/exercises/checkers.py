@@ -58,7 +58,7 @@ class CheckersBoard:
             for i in range(1, len(player.pieces)+1):
                 row += player.piecesign + " "
                 if i%4 == 0:
-                    row = row[:-1] if row_nr%2 == 0 else row + " "
+                    row = row[:-1] if row_nr%2 == 0 else row
                     self.board.append(row)
                     row_nr += 1
                     row = " " if row_nr % 2 == 0 else ""
@@ -84,6 +84,9 @@ class Tests(unittest.TestCase):
         player2 = CheckersPlayer(input("Type name for second player: "))
         game_board = CheckersBoard(player1, player2)
         print(game_board)
+        self.assertEqual(8, len(game_board.board))
+        for x in range(len(game_board.board)):
+            self.assertEqual(8, len(game_board.board[x]))
 
 
 if __name__ == "__main__":
