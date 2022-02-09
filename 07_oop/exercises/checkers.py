@@ -12,16 +12,31 @@ log = logging.getLogger()
 
 class CheckersPlayer:
     __id = 0
-    __piecesigns = "ox"
-    __piececolors = ["red", "white"]
+    __piece_signs = "ox"
+    __piece_colors = ["red", "white"]
+    __pieces_row_nr = 0
     def __init__(self, name:str):
-        self.color = CheckersPlayer.__piececolors[CheckersPlayer.__id]
-        self.name = name
-        self.piecesign = CheckersPlayer.__piecesigns[CheckersPlayer.__id]
+        self.color : str = CheckersPlayer.__piece_colors[CheckersPlayer.__id]
+        self.name : str = name
+        self.piecesign : str = CheckersPlayer.__piece_signs[CheckersPlayer.__id]
+        self.pieces = {}
         CheckersPlayer.__id += 1
+        self.__gen_pieces__()
 
-    def __genpieces__(self):
-        pass
+    def __gen_pieces__(self):
+        # 3 rows of checkers for each player
+        pos_y = CheckersPlayer.__pieces_row_nr
+        player_row_count = pos_y + 3
+        while pos_y < player_row_count:
+            even_y = 1 if pos_y%2 == 0 else 0
+            for x in range(4):
+                pos_x = x * 2 + even_y
+                pos = (pos_x, pos_y)
+                piece = CheckersPiece(self.color, pos)
+                self.pieces[pos] = piece
+            pos_y += 1
+        # move row pointer: 3 rows of checkrs + 2 empty rows in the middle of board
+        CheckersPlayer.__pieces_row_nr += 5
 
 
 class CheckersPiece:
@@ -31,26 +46,44 @@ class CheckersPiece:
 
 
 class CheckersBoard:
-    def __init__(self):
+    def __init__(self, player1 : CheckersPlayer, player2 : CheckersPlayer):
         self.board : list = []
+        self.__init_gameboard__(player1, player2)
 
-    def __gengameboard__(self, player1 : CheckersPlayer, player2 : CheckersPlayer):
-        i = 0
-        def genplayerrows(player : CheckersPlayer):
-            while i < 3:
-                row = " ".join([player.piecesign for _ in range(4)])
-                row = " " + row if i%2 == 0 else row + " "
-                self.board.append(row)
+    def __init_gameboard__(self, player1 : CheckersPlayer, player2 : CheckersPlayer):
+        row_nr = 0
+        def init_player_rows(player : CheckersPlayer):
+            nonlocal row_nr
+            row : str = " " if row_nr%2 == 0 else ""
+            for i in range(1, len(player.pieces)+1):
+                row += player.piecesign + " "
+                if i%4 == 0:
+                    row = row[:-1] if row_nr%2 == 0 else row + " "
+                    self.board.append(row)
+                    row_nr += 1
+                    row = " " if row_nr % 2 == 0 else ""
 
-    def __genplayerpiece__(self, player):
-        pass
+        init_player_rows(player1)
+        self.board.append(" "*8)
+        self.board.append(" " * 8)
+        init_player_rows(player2)
+
+    def __repr__(self):
+        board_str : str = ""
+        for row in self.board:
+            board_str += row + "\n"
+        return board_str
 
 
 class Tests(unittest.TestCase):
     def setUp(self):
         print()
 
-
+    def test_game(self):
+        player1 = CheckersPlayer(input("Type name for first player: "))
+        player2 = CheckersPlayer(input("Type name for second player: "))
+        game_board = CheckersBoard(player1, player2)
+        print(game_board)
 
 
 if __name__ == "__main__":
