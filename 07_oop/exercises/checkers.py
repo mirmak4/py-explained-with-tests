@@ -1,6 +1,7 @@
 import logging
 import random
 import unittest
+from board_game import BoardPiece, BoardPlayer, Board
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -10,18 +11,16 @@ logging.basicConfig(
 log = logging.getLogger()
 
 
-class CheckersPlayer:
+class CheckersPlayer(BoardPlayer):
     __id = 0
     __piece_signs = "ox"
     __piece_colors = ["red", "white"]
     __pieces_row_nr = 0
-    def __init__(self, name:str):
+    def __init__(self, name : str):
         self.color : str = CheckersPlayer.__piece_colors[CheckersPlayer.__id]
-        self.name : str = name
         self.piecesign : str = CheckersPlayer.__piece_signs[CheckersPlayer.__id]
-        self.pieces = {}
         CheckersPlayer.__id += 1
-        self.__gen_pieces__()
+        super(CheckersPlayer, self).__init__(name)
 
     def __gen_pieces__(self):
         # 3 rows of checkers for each player
@@ -39,16 +38,14 @@ class CheckersPlayer:
         CheckersPlayer.__pieces_row_nr += 5
 
 
-class CheckersPiece:
+class CheckersPiece(BoardPiece):
     def __init__(self, color : str, position : tuple):
-        self.color : str = color
-        self.position : tuple = position
+        super(CheckersPiece, self).__init__(color, position)
 
 
-class CheckersBoard:
+class CheckersBoard(Board):
     def __init__(self, player1 : CheckersPlayer, player2 : CheckersPlayer):
-        self.board : list = []
-        self.__init_gameboard__(player1, player2)
+        super(CheckersBoard, self).__init__(player1, player2)
 
     def __init_gameboard__(self, player1 : CheckersPlayer, player2 : CheckersPlayer):
         row_nr = 0
